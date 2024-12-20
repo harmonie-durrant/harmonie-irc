@@ -2,6 +2,7 @@ package com.harmoniedurrant.harmonieirc.playerdata;
 
 // Networking
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.entity.player.Player;
 
 import java.io.IOException;
@@ -44,6 +45,15 @@ public class PlayerData {
         while (!_socket.finishConnect());
         _selector = Selector.open();
         _socket.register(_selector, SelectionKey.OP_WRITE | SelectionKey.OP_READ);
+    }
+
+    public void remove_socket() throws IOException {
+        if (_socket == null || !_socket.isConnected()) {
+            _player.sendSystemMessage(Component.literal("HarmonieIRC: Not connected to a server").withStyle(style -> style.withColor(TextColor.fromRgb(0xFF0000))));
+            return;
+        }
+        sendToServer("QUIT\n");
+        _player.sendSystemMessage(Component.literal("HarmonieIRC: Disconnected successfully!").withStyle(style -> style.withColor(TextColor.fromRgb(0x00FF00))));
     }
 
     public void read_socket() throws IOException, CancelledKeyException {

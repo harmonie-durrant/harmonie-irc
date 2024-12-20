@@ -56,7 +56,7 @@ Tests for more official servers are planned for the future.
 Basic IRC functionality
 - [x] Receive info back from the server
 - [x] irc_msg command
-- [ ] irc_disconnect command
+- [x] irc_disconnect command
 - [ ] irc_join command
 - [ ] irc_leave command
 

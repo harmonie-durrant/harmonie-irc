@@ -2,6 +2,7 @@ package com.harmoniedurrant.harmonieirc.events;
 
 
 import com.harmoniedurrant.harmonieirc.commands.ConnectCommand;
+import com.harmoniedurrant.harmonieirc.commands.DisconnectCommand;
 import com.harmoniedurrant.harmonieirc.commands.NickCommand;
 import com.harmoniedurrant.harmonieirc.commands.PrivMsgCommand;
 import com.harmoniedurrant.harmonieirc.playerdata.PlayerData;
@@ -27,6 +28,7 @@ public class ModEvents {
         new ConnectCommand(event.getDispatcher());
         new NickCommand(event.getDispatcher());
         new PrivMsgCommand(event.getDispatcher());
+        new DisconnectCommand(event.getDispatcher());
 
         ConfigCommand.register(event.getDispatcher());
     }
