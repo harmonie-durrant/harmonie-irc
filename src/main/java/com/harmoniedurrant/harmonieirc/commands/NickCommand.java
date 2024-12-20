@@ -11,6 +11,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.entity.player.Player;
 
+import java.io.IOException;
+
 public class NickCommand {
     public NickCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("irc_nick")
@@ -30,9 +32,12 @@ public class NickCommand {
             player.sendSystemMessage(Component.literal("HarmonieIRC: New nickname must be between 1 and 15 characters!").withStyle(style -> style.withColor(TextColor.fromRgb(0xFFDE21))));
             return 1;
         }
-        data.sendToServer("NICK " + new_nick);
-        // on success return
-        // handle server errors (duplicates etc...)
+        try {
+            data.sendToServer("NICK " + new_nick + "\n");
+        } catch (IOException e) {
+            System.err.println("IO exception: " + e.getMessage());
+            player.sendSystemMessage(Component.literal("HarmonieIRC: ERROR: Not connected to a server.").withStyle(style -> style.withColor(TextColor.fromRgb(0xFF0000))));
+        }
         return 1;
     }
 }

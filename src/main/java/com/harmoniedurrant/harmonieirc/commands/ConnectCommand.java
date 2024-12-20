@@ -13,6 +13,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.entity.player.Player;
 
+import java.io.IOException;
+
 public class ConnectCommand {
 
     public ConnectCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -27,7 +29,7 @@ public class ConnectCommand {
         );
     }
 
-    private int connect_to_server(CommandContext<CommandSourceStack> context) {
+    private int connect_to_server(CommandContext<CommandSourceStack> context) { // throws CommandSyntaxException
         String ip = StringArgumentType.getString(context, "ip");
         int port = IntegerArgumentType.getInteger(context, "port");
         String pass = StringArgumentType.getString(context, "password");
@@ -35,13 +37,20 @@ public class ConnectCommand {
         if (player == null)
             return 0;
         PlayerData data = HarmonieIRC.database.getPlayer(player.getStringUUID());
-        int res = data.create_socket(ip, port);
-        if (res == 1) {
+        try {
+            data.create_socket(ip, port);
+        } catch (IOException e) {
+            System.err.println("(ConnectCommand::connect_to_server() - data.create_socket()) IO Exception: " + e.getMessage());
             player.sendSystemMessage(Component.literal("HarmonieIRC: ERROR: Couldn't connect to server " + ip + ":" + port).withStyle(style -> style.withColor(TextColor.fromRgb(0xFF0000))));
-            System.err.println("ERROR: " + player.getStringUUID() + " Couldn't connect to server " + ip + ":" + port);
             return 1;
         }
-        data.sendToServer("PASS " + pass + "\nNICK " + data.getNickName() + "\nUSER " + data.getUsername() + " 0 * " + data.getRealName());
+        try {
+            data.sendToServer("PASS " + pass + "\nNICK " + data.getNickName() + "\nUSER " + data.getUsername() + " 0 * " + data.getRealName() + "\n");
+        } catch (IOException e) {
+            System.err.println("(ConnectCommand::connect_to_server() - data.sendToServer()) IO Exception: " + e.getMessage());
+            player.sendSystemMessage(Component.literal("HarmonieIRC: ERROR: Couldn't write to server " + ip + ":" + port).withStyle(style -> style.withColor(TextColor.fromRgb(0xFF0000))));
+            return 1;
+        }
         return 1;
     }
 }

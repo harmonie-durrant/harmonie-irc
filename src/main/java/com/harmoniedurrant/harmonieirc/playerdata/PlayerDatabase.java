@@ -1,5 +1,7 @@
 package com.harmoniedurrant.harmonieirc.playerdata;
 
+import java.io.IOException;
+import java.nio.channels.CancelledKeyException;
 import java.util.ArrayList;
 
 public class PlayerDatabase {
@@ -17,6 +19,18 @@ public class PlayerDatabase {
             }
         }
         return null;
+    }
+
+    public void listenToAll() {
+        _clients.forEach((value) -> {
+            try {
+                value.read_socket();
+            } catch (IOException e) {
+                System.err.println("(PlayerDatabase::listenToAll() uid:" + value.getUID() + ") IO Exception: " + e.getMessage());
+            } catch (CancelledKeyException e) {
+                System.err.println("(PlayerDatabase::listenToAll() uid:" + value.getUID() + ") Cancelled Selection Key Exception: " + e.getMessage());
+            }
+        });
     }
 
     public void addPlayer(PlayerData data) {

@@ -46,7 +46,7 @@ Sends a message to a user/channel in the currently connected IRC server.
 ## 🗺️ Roadmap
 
 Basic IRC functionality
-- [ ] Receive info back from the server
+- [x] Receive info back from the server
 - [ ] irc_msg command
 - [ ] irc_disconnect command
 - [ ] irc_join command
