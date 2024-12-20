@@ -136,15 +136,23 @@ public class PlayerData {
 
     public void handle_code(int code, String message) {
         System.out.println("code: " + code + " message: " + message);
-        if (code == 1) {
-            send_player_message(message);
-        }
+        send_player_message(message);
         System.out.println("Input not handled!");
     }
 
     public void handle_no_code(String[] args) {
         if (args[1].equals("NICK")) {
             set_nickname(args[2]);
+            return;
+        }if (args[1].equals("PRIVMSG")) {
+            if (args.length < 4)
+                return;
+            String message = Arrays.stream(args)
+                    .skip(3).collect(Collectors.joining(" "));
+            if (message.startsWith(":")) {
+                message = message.replaceFirst(":", "");
+            }
+            send_player_message("[harmonie_irc] <" + args[2] + "> " + message);
             return;
         }
         System.out.println("Input not handled!");
