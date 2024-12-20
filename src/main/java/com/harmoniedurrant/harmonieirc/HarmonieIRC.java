@@ -1,5 +1,7 @@
 package com.harmoniedurrant.harmonieirc;
 
+import com.harmoniedurrant.harmonieirc.playerdata.PlayerData;
+import com.harmoniedurrant.harmonieirc.playerdata.PlayerDatabase;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -17,7 +19,14 @@ import org.slf4j.Logger;
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(HarmonieIRC.MOD_ID)
 public class HarmonieIRC {
+
+    // The database for IRC clients
+    public static final PlayerDatabase database = new PlayerDatabase();
+    public static PlayerData mydata;
+
+    // Unique mod id to use in game
     public static final String MOD_ID = "harmonieirc";
+
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
