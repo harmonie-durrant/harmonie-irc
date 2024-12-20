@@ -3,7 +3,6 @@ package com.harmoniedurrant.harmonieirc.commands;
 import com.harmoniedurrant.harmonieirc.HarmonieIRC;
 import com.harmoniedurrant.harmonieirc.playerdata.PlayerData;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
