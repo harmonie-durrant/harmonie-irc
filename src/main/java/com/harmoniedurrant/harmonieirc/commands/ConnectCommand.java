@@ -41,7 +41,7 @@ public class ConnectCommand {
             System.err.println("ERROR: " + player.getStringUUID() + " Couldn't connect to server " + ip + ":" + port);
             return 1;
         }
-        data.sendToServer("PASS " + pass + "\nNICK " + data.getNickName() + "\nUSER " + data.getUsername() + " 0 * " + data.getRealName() + "\n");
+        data.sendToServer("PASS " + pass + "\nNICK " + data.getNickName() + "\nUSER " + data.getUsername() + " 0 * " + data.getRealName());
         return 1;
     }
 }

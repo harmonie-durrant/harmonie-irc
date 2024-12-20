@@ -30,7 +30,8 @@ public class NickCommand {
             player.sendSystemMessage(Component.literal("HarmonieIRC: New nickname must be between 1 and 15 characters!").withStyle(style -> style.withColor(TextColor.fromRgb(0xFFDE21))));
             return 1;
         }
-        data.sendToServer("NICK " + new_nick + "\n");
+        data.sendToServer("NICK " + new_nick);
+        // on success return
         // handle server errors (duplicates etc...)
         return 1;
     }

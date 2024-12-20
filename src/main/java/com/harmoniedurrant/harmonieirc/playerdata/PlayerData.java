@@ -2,7 +2,7 @@ package com.harmoniedurrant.harmonieirc.playerdata;
 
 // Networking
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -18,17 +18,6 @@ public class PlayerData {
         _nickname = nick;
         _username = username;
         _real_name = real_name;
-    }
-
-    // Destructor
-    public void deleteMe() {
-        try {
-            _socket.close();
-        } catch (IOException e) {
-            System.err.println("I/O error: " + e.getMessage());
-        } catch (NullPointerException e) {
-            System.err.println("NullPointerException: " + e.getMessage());
-        }
     }
 
     public int create_socket(String ip, int port) {
@@ -58,17 +47,12 @@ public class PlayerData {
         System.out.println("Sending: " + msg);
         if (_socket.isClosed())
             return;
-        OutputStream os;
-        String res;
         try {
-            os = _socket.getOutputStream();
-            os.write(msg.getBytes());
-            res = String.valueOf(_socket.getInputStream().read());
-            System.out.println("Received: " + res + " from the server");
+            PrintWriter out = new PrintWriter(_socket.getOutputStream(), true);
+            out.println(msg);
         } catch (Exception e) {
             System.err.println("Error sending message to stream: " + e.getMessage());
         }
-
     }
 
     /*
