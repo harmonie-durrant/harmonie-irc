@@ -43,11 +43,19 @@ Sends a message to a user/channel in the currently connected IRC server.
 
 <br>
 
+## What servers are supported?
+
+The client is built using my [ft_irc](https://github.com/harmonie-durrant/ft_irc) repository as the server. [irssi](https://irssi.org) was used as a reference client to make the server.
+
+Tests for more official servers are planned for the future.
+
+<br>
+
 ## 🗺️ Roadmap
 
 Basic IRC functionality
 - [x] Receive info back from the server
-- [ ] irc_msg command
+- [x] irc_msg command
 - [ ] irc_disconnect command
 - [ ] irc_join command
 - [ ] irc_leave command
