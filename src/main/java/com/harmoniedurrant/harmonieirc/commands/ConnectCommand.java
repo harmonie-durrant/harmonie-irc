@@ -19,13 +19,13 @@ public class ConnectCommand {
 
     public ConnectCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("irc_connect")
-            .then(Commands.argument("ip", StringArgumentType.string())
-                .then(Commands.argument("port", IntegerArgumentType.integer())
-                    .then(Commands.argument("password", StringArgumentType.string())
-                        .executes(this::connect_to_server)
-                    ) // pass end
-                ) // port end
-            ) // ip end
+                .then(Commands.argument("ip", StringArgumentType.string())
+                        .then(Commands.argument("port", IntegerArgumentType.integer())
+                                .then(Commands.argument("password", StringArgumentType.string())
+                                        .executes(this::connect_to_server)
+                                ) // password end
+                        ) // port end
+                ) // ip end
         );
     }
 

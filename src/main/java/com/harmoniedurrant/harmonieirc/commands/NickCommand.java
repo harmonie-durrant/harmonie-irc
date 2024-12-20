@@ -16,9 +16,9 @@ import java.io.IOException;
 public class NickCommand {
     public NickCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("irc_nick")
-            .then(Commands.argument("new_nick", StringArgumentType.string())
-                .executes(this::change_nickname)
-            ) // new_nick end
+                .then(Commands.argument("new_nick", StringArgumentType.string())
+                        .executes(this::change_nickname)
+                ) // new_nick end
         );
     }
 
