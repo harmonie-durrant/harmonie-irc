@@ -1,6 +1,11 @@
 # Harmonie IRC
 
-After making a project at 42 school 👩‍🎓 called ft_irc where I create an IRC server, I was inspired to make my own client, but having a bunch of clients already in the market makes the idea of making another one boring 🙄. So like any sane person 🙃 I challenged myself to at least learn something new in the process since I already know about how to use sockets from the server side, so I turned to my favourite game... Minecraft 🎮 ! The game is coded in Java so a perfect opportunity to dive into how my favourite game works to learn a new language 🔤. So from that moment onwards I strive to make a working IRC client in Minecraft.
+[![Java CI with Gradle](https://github.com/harmonie-durrant/harmonie-irc/actions/workflows/gradle.yml/badge.svg)](https://github.com/harmonie-durrant/harmonie-irc/actions/workflows/gradle.yml)
+
+After making a project at 42 school 👩‍🎓 called ft_irc where I create an IRC server, I was inspired to make my own client, but having a bunch of clients already in the market makes the idea of making another one boring 🙄.
+So like any sane person 🙃 I challenged myself to at least learn something new in the process since I already know about how to use sockets from the server side, so I turned to my favourite game... Minecraft 🎮!
+The game is coded in Java so a perfect opportunity to dive into how my favourite game works to learn a new language 🔤.
+So from that moment onwards I strive to make a working IRC client in Minecraft.
 
 Harmonie IRC an IRC client made for your Minecraft world by [Harmonie Durrant](https://github.com/harmonie-durrant).
 
