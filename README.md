@@ -2,7 +2,7 @@
 
 An IRC client for minecraft made by [Harmonie Durrant](https://github.com/harmonie-durrant).
 
-## Commands
+## 💻 Commands
 
 All commands start with `irc_` to avoid conflicting commands.
 
@@ -33,3 +33,26 @@ Sends a message to a user/channel in the currently connected IRC server.
 `<target>`: The nick of the user or name of the channel you want to send your message to.
 
 `<message>`: The message you want to send
+
+<br>
+
+## 🗺️ Roadmap
+
+Basic IRC functionality
+- [ ] Receive info back from the server
+- [ ] irc_msg command
+- [ ] irc_disconnect command
+- [ ] irc_join command
+- [ ] irc_leave command
+
+Advanced updates
+- [ ] irc_disconnect optional password
+- [ ] Handle duplicate Nicknames
+- [ ] Limit nickname length
+- [ ] irc_whois command
+- [ ] Operator commands ban, kick, topic
+- [ ] Ping server to check connection
+- [ ] Auto reply mode (a sort of DND mode)
+- [ ] Customize text coloring
+- [ ] CAP [LS, REQ, END...] IRC commands
+- [ ] Spin up custom server for current world/server
