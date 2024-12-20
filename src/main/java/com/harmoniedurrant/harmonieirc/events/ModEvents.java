@@ -22,6 +22,7 @@ public class ModEvents {
     public static void onCommandsRegister(RegisterCommandsEvent event) {
         new TestCommand(event.getDispatcher());
         new ConnectCommand(event.getDispatcher());
+        new NickCommand(event.getDispatcher());
 
         ConfigCommand.register(event.getDispatcher());
     }
