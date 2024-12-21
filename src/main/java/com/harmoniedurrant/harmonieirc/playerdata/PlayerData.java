@@ -1,8 +1,10 @@
 package com.harmoniedurrant.harmonieirc.playerdata;
 
 // Networking
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextColor;
+import com.harmoniedurrant.harmonieirc.utils.ErrorMessages;
+import com.harmoniedurrant.harmonieirc.utils.MessageUtils;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 
 import java.io.IOException;
@@ -49,17 +51,16 @@ public class PlayerData {
 
     public void remove_socket() throws IOException {
         if (_socket == null || !_socket.isConnected()) {
-            _player.sendSystemMessage(Component.literal("HarmonieIRC: Not connected to a server").withStyle(style -> style.withColor(TextColor.fromRgb(0xFF0000))));
+            MessageUtils.sendError(ErrorMessages.ERR_NOT_CONNECTED, _player);
             return;
         }
         sendToServer("QUIT\n");
-        _player.sendSystemMessage(Component.literal("HarmonieIRC: Disconnected successfully!").withStyle(style -> style.withColor(TextColor.fromRgb(0x00FF00))));
+        MessageUtils.sendSuccess("Disconnected successfully!", _player);
     }
 
     public void read_socket() throws IOException, CancelledKeyException {
-        if (_socket == null || !_socket.isConnected()) {
+        if (_socket == null || !_socket.isConnected())
             return;
-        }
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         int readyChannels = _selector.select(1000);
         if (readyChannels == 0)
@@ -145,14 +146,15 @@ public class PlayerData {
     }
 
     public void handle_code(int code, String message) {
-        System.out.println("code: " + code + " message: " + message);
-        send_player_message(message);
-        System.out.println("Input not handled!");
+        MutableComponent text = MessageUtils.TextWithColor("[harmonie_irc] ", 0xFF0000);
+        MessageUtils.AppendText(text, IntegerArgumentType.integer(code).toString(), 0x00FFFF);
+        MessageUtils.AppendText(text, message, 0xFFFFFF);
+        _player.sendSystemMessage(text);
     }
 
     public void handle_no_code(String[] args) {
         if (args[1].equals("NICK")) {
-            set_nickname(args[2]);
+            set_nickname(args[2]); // To check against other servers (not always args[2])
             return;
         }if (args[1].equals("PRIVMSG")) {
             if (args.length < 4)
@@ -162,7 +164,7 @@ public class PlayerData {
             if (message.startsWith(":")) {
                 message = message.replaceFirst(":", "");
             }
-            send_player_message("[harmonie_irc] <" + args[2] + "> " + message);
+            MessageUtils.showPrivaetMessage(args[2], message, _player);
             return;
         }
         System.out.println("Input not handled!");
@@ -170,11 +172,7 @@ public class PlayerData {
 
     public final void set_nickname(String nick) {
         _nickname = nick;
-        send_player_message("You are now known as " + _nickname + "!");
-    }
-
-    public final void send_player_message(String message) {
-        _player.sendSystemMessage(Component.literal("HarmonieIRC: " + message));
+        MessageUtils.sendInfo("You are now known as " + _nickname, _player);
     }
 
     public final String getUID() {
@@ -193,10 +191,7 @@ public class PlayerData {
         return _real_name;
     }
 
-    public void debugPrint() {
-        System.out.println("Player: " + _uid);
-        System.out.println("NickName: " + _nickname);
-        System.out.println("UserName: " + _username);
-        System.out.println("RealName: " + _real_name);
+    public boolean isSocketConnected() {
+        return !(_socket == null || !_socket.isConnected());
     }
 }

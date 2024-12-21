@@ -25,7 +25,7 @@ public class DisconnectCommand {
         try {
             data.remove_socket();
         } catch (IOException e) {
-            System.err.println("IO Error: " + e.getMessage());
+            System.err.println("IO Error on disconnect: " + e.getMessage());
         }
         return 1;
     }

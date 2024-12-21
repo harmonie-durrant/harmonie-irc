@@ -35,19 +35,9 @@ public class PlayerDatabase {
 
     public void addPlayer(PlayerData data) {
         _clients.add(data);
-        System.out.println("Added user with uid: " + data.getUID());
-        debugPrint(data.getUID());
     }
 
     public void deletePlayer(String uid) {
         _clients.removeIf(playerData -> playerData.getUID().equals(uid));
-    }
-
-    private void debugPrint(String uid) {
-        _clients.forEach((value) -> {
-            if (value.getUID().equals(uid)) {
-                value.debugPrint();
-            }
-        });
     }
 }

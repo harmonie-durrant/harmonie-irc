@@ -2,13 +2,13 @@ package com.harmoniedurrant.harmonieirc.commands;
 
 import com.harmoniedurrant.harmonieirc.HarmonieIRC;
 import com.harmoniedurrant.harmonieirc.playerdata.PlayerData;
+import com.harmoniedurrant.harmonieirc.utils.ErrorMessages;
+import com.harmoniedurrant.harmonieirc.utils.MessageUtils;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.entity.player.Player;
 
 import java.io.IOException;
@@ -29,14 +29,13 @@ public class NickCommand {
             return 0;
         PlayerData data = HarmonieIRC.database.getPlayer(player.getStringUUID());
         if (new_nick.length() > 15 || new_nick.isEmpty()) {
-            player.sendSystemMessage(Component.literal("HarmonieIRC: New nickname must be between 1 and 15 characters!").withStyle(style -> style.withColor(TextColor.fromRgb(0xFFDE21))));
+            MessageUtils.sendInfo("nicknames must be between 1 and 15 characters!", player);
             return 1;
         }
         try {
             data.sendToServer("NICK " + new_nick + "\n");
         } catch (IOException e) {
-            System.err.println("IO exception: " + e.getMessage());
-            player.sendSystemMessage(Component.literal("HarmonieIRC: ERROR: Not connected to a server.").withStyle(style -> style.withColor(TextColor.fromRgb(0xFF0000))));
+            MessageUtils.sendError(ErrorMessages.ERR_NOT_CONNECTED, player);
         }
         return 1;
     }
