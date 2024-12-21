@@ -7,7 +7,7 @@ So like any sane person 🙃 I challenged myself to at least learn something new
 The game is coded in Java so a perfect opportunity to dive into how my favourite game works to learn a new language 🔤.
 So from that moment onwards I strive to make a working IRC client in Minecraft.
 
-Harmonie IRC an IRC client made for your Minecraft world by [Harmonie Durrant](https://github.com/harmonie-durrant).
+Harmonie IRC, an IRC client made for your Minecraft world by [Harmonie Durrant](https://github.com/harmonie-durrant).
 
 ## 💻 Commands
 
