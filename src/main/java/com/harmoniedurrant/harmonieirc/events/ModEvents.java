@@ -28,6 +28,7 @@ public class ModEvents {
         new DisconnectCommand(event.getDispatcher());
         new JoinCommand(event.getDispatcher());
         new LeaveCommand(event.getDispatcher());
+        new HelpCommand(event.getDispatcher());
 
         ConfigCommand.register(event.getDispatcher());
     }
