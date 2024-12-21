@@ -41,6 +41,10 @@ Sends a message to a user/channel in the currently connected IRC server.
 
 `<message>`: The message you want to send
 
+### /irc_disconnect
+
+Disconnects you from the currently connected IRC server.
+
 <br>
 
 ## What servers are supported?
