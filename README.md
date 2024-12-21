@@ -17,6 +17,11 @@ All commands start with `irc_` to avoid conflicting commands.
 
 `{}`: optional argument
 
+
+### /irc_help
+
+Shows info about the mod and it's commands
+
 ### /irc_connect <ip> <port> <password>
 
 Connects you to an IRC server. (ref: [ft_irc](https://github.com/harmonie-durrant/ft_irc))
@@ -45,6 +50,18 @@ Sends a message to a user/channel in the currently connected IRC server.
 
 Disconnects you from the currently connected IRC server.
 
+### /irc_join <channel(s)> {key(s)}
+
+Join one or multiple channels in the connected server
+
+`<channel(s)>` Channels to join separated by spaces.
+
+`<key(s)>` Passwords to the corresponding channels in the same order separated by spaces.
+
+### /irc_leave <channel(s)>
+
+`<channel(s)>` Channels to leave separated by spaces.
+
 <br>
 
 ## What servers are supported?
@@ -61,8 +78,8 @@ Basic IRC functionality
 - [x] Receive info back from the server
 - [x] irc_msg command
 - [x] irc_disconnect command
-- [ ] irc_join command
-- [ ] irc_leave command
+- [x] irc_join command
+- [x] irc_leave command
 
 Advanced updates
 - [ ] irc_disconnect optional password
