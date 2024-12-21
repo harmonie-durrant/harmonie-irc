@@ -49,7 +49,7 @@ public class ConnectCommand {
             return 1;
         }
         try {
-            data.sendToServer("PASS " + pass + "\nNICK " + data.getNickName() + "\nUSER " + data.getUsername() + " 0 * " + data.getRealName() + "\n");
+            data.sendToServer("PASS " + pass + "\nNICK " + data.getNickName() + "\nUSER " + data.getUsername() + " minecraft * " + data.getRealName() + "\n");
         } catch (IOException e) {
             MessageUtils.sendError(ErrorMessages.ERR_WRITE(ip, port), player);
            return 1;

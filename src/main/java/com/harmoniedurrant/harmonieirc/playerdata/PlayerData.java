@@ -3,7 +3,6 @@ package com.harmoniedurrant.harmonieirc.playerdata;
 // Networking
 import com.harmoniedurrant.harmonieirc.utils.ErrorMessages;
 import com.harmoniedurrant.harmonieirc.utils.MessageUtils;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 
@@ -147,9 +146,10 @@ public class PlayerData {
 
     public void handle_code(int code, String message) {
         MutableComponent text = MessageUtils.TextWithColor("[harmonie_irc] ", 0xFF0000);
-        MessageUtils.AppendText(text, IntegerArgumentType.integer(code).toString(), 0x00FFFF);
+        MessageUtils.AppendText(text, code + " ", 0x00FFFF);
         MessageUtils.AppendText(text, message, 0xFFFFFF);
         _player.sendSystemMessage(text);
+
     }
 
     public void handle_no_code(String[] args) {

@@ -1,10 +1,7 @@
 package com.harmoniedurrant.harmonieirc.events;
 
 
-import com.harmoniedurrant.harmonieirc.commands.ConnectCommand;
-import com.harmoniedurrant.harmonieirc.commands.DisconnectCommand;
-import com.harmoniedurrant.harmonieirc.commands.NickCommand;
-import com.harmoniedurrant.harmonieirc.commands.PrivMsgCommand;
+import com.harmoniedurrant.harmonieirc.commands.*;
 import com.harmoniedurrant.harmonieirc.playerdata.PlayerData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -29,6 +26,8 @@ public class ModEvents {
         new NickCommand(event.getDispatcher());
         new PrivMsgCommand(event.getDispatcher());
         new DisconnectCommand(event.getDispatcher());
+        new JoinCommand(event.getDispatcher());
+        new LeaveCommand(event.getDispatcher());
 
         ConfigCommand.register(event.getDispatcher());
     }
