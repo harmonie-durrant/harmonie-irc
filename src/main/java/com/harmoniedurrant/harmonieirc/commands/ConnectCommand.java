@@ -42,23 +42,27 @@ public class ConnectCommand {
             MessageUtils.sendError(ErrorMessages.ERR_ALREADY_CONNECTED, player);
             return 0;
         }
+        join_server(player, data, ip, port, pass);
+        return 1;
+    }
+
+    public static void join_server(Player player, PlayerData data, String ip, int port, String pass) {
         try {
             data.create_socket(ip, port);
         } catch (IOException e) {
             MessageUtils.sendError(ErrorMessages.ERR_CONNECT(ip, port), player);
-            return 1;
+            return;
         }
         try {
             data.sendToServer("PASS " + pass + "\nNICK " + data.getNickName() + "\nUSER " + data.getUsername() + " minecraft * " + data.getRealName() + "\n");
         } catch (IOException e) {
             MessageUtils.sendError(ErrorMessages.ERR_WRITE(ip, port), player);
-           return 1;
+            return;
         }
         if (data.isSocketConnected()) {
             MutableComponent text = MessageUtils.TextWithColor("[harmonie_irc] ", 0xFF0000);
             MessageUtils.AppendText(text, "You are now connected to " + ip + ":" + port, 0x00FF00);
             player.sendSystemMessage(text);
         }
-        return 1;
     }
 }

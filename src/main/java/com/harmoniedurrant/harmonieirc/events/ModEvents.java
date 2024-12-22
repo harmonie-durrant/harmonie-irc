@@ -1,6 +1,7 @@
 package com.harmoniedurrant.harmonieirc.events;
 
 
+import com.harmoniedurrant.harmonieirc.Config;
 import com.harmoniedurrant.harmonieirc.commands.*;
 import com.harmoniedurrant.harmonieirc.playerdata.PlayerData;
 import net.minecraft.world.entity.player.Player;
@@ -38,6 +39,9 @@ public class ModEvents {
         Player player = event.getEntity();
         PlayerData data = new PlayerData(player, player.getStringUUID(), player.getDisplayName().getString(), player.getName().getString(), player.getScoreboardName());
         HarmonieIRC.database.addPlayer(data);
+        if (Config.join_on_load) {
+            ConnectCommand.join_server(player, data, Config.default_ip, Config.default_port, Config.default_pass);
+        }
     }
 
     @SubscribeEvent
@@ -50,7 +54,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void OnTickEvent(TickEvent event) {
         _tickCount++;
-        if (_tickCount % 2000 == 0) {
+        if (_tickCount % 1000 == 0) {
             HarmonieIRC.database.listenToAll();
             _tickCount = 0;
         }

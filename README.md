@@ -74,21 +74,21 @@ Tests for more official servers are planned for the future.
 
 ## 🗺️ Roadmap
 
-Basic IRC functionality
-- [x] Receive info back from the server
-- [x] irc_msg command
-- [x] irc_disconnect command
-- [x] irc_join command
-- [x] irc_leave command
-
-Advanced updates
-- [ ] irc_disconnect optional password
+Planned updates
+- [x] Auto connect to a configured server
+- [ ] Better irc_help
+- [ ] Handle server replies (errors etc...)
+- [ ] Custom GUI
+- [ ] GUI configurable to be put into a handheld item or block
+- [ ] irc_connect optional password
 - [ ] Handle duplicate Nicknames
 - [ ] Limit nickname length
 - [ ] irc_whois command
 - [ ] Operator commands ban, kick, topic
 - [ ] Ping server to check connection
 - [ ] Auto reply mode (a sort of DND mode)
-- [ ] Customize text coloring
+- [ ] Customize text coloring (themes)
 - [ ] CAP [LS, REQ, END...] IRC commands
-- [ ] Spin up custom server for current world/server
+
+Planned for much later
+- [ ] Ability to spin up custom IRC server for current world/server
