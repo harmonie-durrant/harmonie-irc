@@ -21,7 +21,7 @@ public class Config
             .define("default_ip", "");
 
     private static final ForgeConfigSpec.IntValue DEFAULT_PORT = BUILDER
-            .comment("Default server port to connect to. (0 to 6667)")
+            .comment("Default server port to connect to.")
             .defineInRange("default_port", 6667, 0, 65535);
 
     private static final ForgeConfigSpec.ConfigValue<String> DEFAULT_PASS = BUILDER
