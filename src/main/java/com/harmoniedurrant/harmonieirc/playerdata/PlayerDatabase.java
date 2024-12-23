@@ -1,15 +1,24 @@
 package com.harmoniedurrant.harmonieirc.playerdata;
 
+import com.harmoniedurrant.harmonieirc.commands.*;
+
 import java.io.IOException;
 import java.nio.channels.CancelledKeyException;
 import java.util.ArrayList;
 
 public class PlayerDatabase {
 
+    public static final ArrayList<CommandBase> commands = new ArrayList<>();
     private static final ArrayList<PlayerData> _clients = new ArrayList<>();
 
     public PlayerDatabase() {
-
+        commands.add(new HelpCommand());
+        commands.add(new ConnectCommand());
+        commands.add(new DisconnectCommand());
+        commands.add(new NickCommand());
+        commands.add(new PrivMsgCommand());
+        commands.add(new JoinCommand());
+        commands.add(new LeaveCommand());
     }
 
     public PlayerData getPlayer(String uid) {
