@@ -156,15 +156,20 @@ public class PlayerData {
         if (args[1].equals("NICK")) {
             set_nickname(args[2]); // To check against other servers (not always args[2])
             return;
-        }if (args[1].equals("PRIVMSG")) {
+        }
+        if (args[1].equals("PRIVMSG")) {
             if (args.length < 4)
                 return;
+            String sender = args[0];
+            if (sender.startsWith(":")) {
+                sender = sender.replaceFirst(":", "");
+            }
             String message = Arrays.stream(args)
                     .skip(3).collect(Collectors.joining(" "));
             if (message.startsWith(":")) {
                 message = message.replaceFirst(":", "");
             }
-            MessageUtils.showPrivaetMessage(args[2], message, _player);
+            MessageUtils.showPrivaetMessage(sender, message, _player);
             return;
         }
         System.out.println("Input not handled!");
