@@ -34,7 +34,7 @@ public class MessageUtils {
 
     public static void showPrivaetMessage(String sender, String message, Player player) {
         MutableComponent text = MessageUtils.TextWithColor("[harmonie_irc] ", 0xFF0000);
-        AppendText(text, "<" + sender + ">", 0x0000FF);
+        AppendText(text, "<" + sender + "> ", 0x00FF80);
         AppendText(text, message, 0xFFFFFF);
         player.sendSystemMessage(text);
     }
