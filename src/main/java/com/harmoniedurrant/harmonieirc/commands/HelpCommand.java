@@ -1,14 +1,10 @@
 package com.harmoniedurrant.harmonieirc.commands;
 
-import com.harmoniedurrant.harmonieirc.HarmonieIRC;
-import com.harmoniedurrant.harmonieirc.playerdata.PlayerData;
 import com.harmoniedurrant.harmonieirc.utils.MessageUtils;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 
