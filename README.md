@@ -78,7 +78,7 @@ Tests for more official servers are planned for the future.
 
 Planned updates
 - [x] Auto connect to a configured server
-- [ ] Better irc_help
+- [x] Better irc_help
 - [ ] Achievements
 - [ ] Handle server replies (errors etc...)
 - [ ] Custom GUI
