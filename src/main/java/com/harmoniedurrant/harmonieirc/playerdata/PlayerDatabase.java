@@ -2,9 +2,9 @@ package com.harmoniedurrant.harmonieirc.playerdata;
 
 import com.harmoniedurrant.harmonieirc.commands.*;
 
-import java.io.IOException;
-import java.nio.channels.CancelledKeyException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class PlayerDatabase {
 
@@ -31,15 +31,17 @@ public class PlayerDatabase {
     }
 
     public void listenToAll() {
-        _clients.forEach((value) -> {
-            try {
-                value.read_socket();
-            } catch (IOException e) {
-                System.err.println("(PlayerDatabase::listenToAll() uid:" + value.getUID() + ") IO Exception: " + e.getMessage());
-            } catch (CancelledKeyException e) {
-                System.err.println("(PlayerDatabase::listenToAll() uid:" + value.getUID() + ") Cancelled Selection Key Exception: " + e.getMessage());
-            }
-        });
+        try (ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())) {
+            _clients.forEach((value) -> executor.execute(() -> {
+                try {
+                    value.read_socket();
+                } catch (Exception e) {
+                    System.err.println("(PlayerDatabase::listenToAll() uid:" + value.getUID() + ") Exception: " + e.getMessage());
+                }
+            }));
+        } catch (Exception e) {
+            System.err.println("(PlayerDatabase::listenToAll()) Exception: " + e.getMessage());
+        }
     }
 
     public void addPlayer(PlayerData data) {

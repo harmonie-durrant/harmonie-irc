@@ -26,7 +26,6 @@ public class HelpCommand extends CommandBase {
                 .then(Commands.argument(this.args[0], StringArgumentType.string())
                         .executes(this::execute)) // all parameters
                 .executes(this::execute_no_params); // no parameters
-
     }
 
     // execute_no_params is never called

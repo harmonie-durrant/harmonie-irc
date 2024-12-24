@@ -53,7 +53,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void OnTickEvent(TickEvent event) {
         _tickCount++;
-        if (_tickCount % 1000 == 0) {
+        if (_tickCount % 1500 == 0) {
             HarmonieIRC.database.listenToAll();
             _tickCount = 0;
         }

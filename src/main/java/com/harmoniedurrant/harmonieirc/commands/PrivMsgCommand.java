@@ -9,6 +9,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 
 import java.io.IOException;
@@ -45,6 +46,10 @@ public class PrivMsgCommand extends CommandBase {
         } catch (IOException e) {
             MessageUtils.sendError(ErrorMessages.ERR_NOT_CONNECTED, player);
         }
+        MutableComponent text =  MessageUtils.TextWithColor("[harmonie_irc] ", 0xFF0000);
+        MessageUtils.AppendText(text, "<" + data.getNickName() + "> ", 0x00FF80);
+        MessageUtils.AppendText(text, message, 0xFFFFFF);
+        player.sendSystemMessage(text);
         return 1;
     }
 }
