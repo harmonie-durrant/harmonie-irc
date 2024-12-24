@@ -1,26 +1,36 @@
 package com.harmoniedurrant.harmonieirc.commands;
 
+import com.harmoniedurrant.harmonieirc.playerdata.PlayerDatabase;
 import com.harmoniedurrant.harmonieirc.utils.MessageUtils;
-import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 
-public class HelpCommand {
-    public HelpCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("irc_help")
-                .executes(this::help_all)
-                /* help command with command parameter
-                .then(Commands.argument("command", StringArgumentType.string())
-                        .executes(this::help_command)
-                ) // channel end
-                 */
+public class HelpCommand extends CommandBase {
+    public HelpCommand() {
+        super("irc_help", "Show info about commands.",
+                new String[] { "command" },
+                new String[] {
+                        "Command you need help with."
+                }
         );
     }
 
-    public int help_all(CommandContext<CommandSourceStack> context) {
+    @Override
+    protected void defineArguments(LiteralArgumentBuilder<CommandSourceStack> builder) {
+        builder
+                .then(Commands.argument(this.args[0], StringArgumentType.string())
+                        .executes(this::execute)) // all parameters
+                .executes(this::execute_no_params); // no parameters
+    }
+
+    // execute_no_params is never called
+    protected int execute_no_params(CommandContext<CommandSourceStack> context) {
+        System.out.println("No Params, printing all (through execute_no_params)");
         Player player = context.getSource().getPlayer();
         if (player == null)
             return 0;
@@ -42,72 +52,28 @@ public class HelpCommand {
         MessageUtils.AppendText(text, ": optional argument.\n", MessageUtils.COLOR_WHITE);
         player.sendSystemMessage(text);
 
-        player.sendSystemMessage(MessageUtils.TextWithColor("/irc_connect [ip] [port] {pass}", MessageUtils.COLOR_PURPLE));
-        player.sendSystemMessage(MessageUtils.TextWithColor("Connects you to an IRC server.", MessageUtils.COLOR_WHITE));
-
-        //[ip]: The address of the server.
-        text = MessageUtils.TextWithColor("[ip]", MessageUtils.COLOR_GREEN);
-        MessageUtils.AppendText(text, ": The address of the server.", MessageUtils.COLOR_WHITE);
-        player.sendSystemMessage(text);
-
-        //[port]: The port the IRC server is hosted on.
-        text = MessageUtils.TextWithColor("[port]", MessageUtils.COLOR_GREEN);
-        MessageUtils.AppendText(text, ": The port the IRC server is hosted on.", MessageUtils.COLOR_WHITE);
-        player.sendSystemMessage(text);
-
-        //{pass}: The password needed to access the server.
-        text = MessageUtils.TextWithColor("{pass}", MessageUtils.COLOR_GREEN);
-        MessageUtils.AppendText(text, ": The password needed to access the server.\n", MessageUtils.COLOR_WHITE);
-        player.sendSystemMessage(text);
-
-        player.sendSystemMessage(MessageUtils.TextWithColor("/irc_nick [new_nick]", MessageUtils.COLOR_PURPLE));
-        player.sendSystemMessage(MessageUtils.TextWithColor("Changes your nickname in the currently connected IRC server.", MessageUtils.COLOR_WHITE));
-
-        //[new_nick]: your new nickname.
-        text = MessageUtils.TextWithColor("[new_nick]", MessageUtils.COLOR_GREEN);
-        MessageUtils.AppendText(text, ": your new nickname.\n", MessageUtils.COLOR_WHITE);
-        player.sendSystemMessage(text);
-
-        player.sendSystemMessage(MessageUtils.TextWithColor("/irc_mgs [target] [message]", MessageUtils.COLOR_PURPLE));
-        player.sendSystemMessage(MessageUtils.TextWithColor("Sends a message to a user/channel in the currently connected IRC server.", MessageUtils.COLOR_WHITE));
-
-        //[target]: The nick of the user or name of the channel you want to send your message to.
-        text = MessageUtils.TextWithColor("[target]", MessageUtils.COLOR_GREEN);
-        MessageUtils.AppendText(text, ": The nick of the user or name of the channel you want to send your message to.\n", MessageUtils.COLOR_WHITE);
-        player.sendSystemMessage(text);
-
-        //[message]: The message you want to send.
-        text = MessageUtils.TextWithColor("[message]", MessageUtils.COLOR_GREEN);
-        MessageUtils.AppendText(text, ": The message you want to send.\n", MessageUtils.COLOR_WHITE);
-        player.sendSystemMessage(text);
-
-        player.sendSystemMessage(MessageUtils.TextWithColor("/irc_disconnect", MessageUtils.COLOR_PURPLE));
-        player.sendSystemMessage(MessageUtils.TextWithColor("Disconnects you from the currently connected IRC server.\n", MessageUtils.COLOR_WHITE));
-
-        player.sendSystemMessage(MessageUtils.TextWithColor("/irc_join [channel(s)] {key(s)}", MessageUtils.COLOR_PURPLE));
-        player.sendSystemMessage(MessageUtils.TextWithColor("Join one or multiple channels in the connected server.", MessageUtils.COLOR_WHITE));
-
-        //[channel(s)]: Channels to join separated by spaces.
-        text = MessageUtils.TextWithColor("[channel(s)]", MessageUtils.COLOR_GREEN);
-        MessageUtils.AppendText(text, ": Channels to join separated by spaces.", MessageUtils.COLOR_WHITE);
-        player.sendSystemMessage(text);
-
-        player.sendSystemMessage(MessageUtils.TextWithColor("/irc_leave [channel(s)]", MessageUtils.COLOR_PURPLE));
-        player.sendSystemMessage(MessageUtils.TextWithColor("Leave one or multiple channels in the connected server.", MessageUtils.COLOR_WHITE));
-
-        //[channel(s)]: Channels to join separated by spaces.
-        text = MessageUtils.TextWithColor("[channel(s)]", MessageUtils.COLOR_GREEN);
-        MessageUtils.AppendText(text, ": Channels to leave separated by spaces.", MessageUtils.COLOR_WHITE);
-        player.sendSystemMessage(text);
-
+        // Print info on all commands
+        PlayerDatabase.commands.forEach((command -> command.printInfo(player)));
         player.sendSystemMessage(MessageUtils.TextWithColor("--------------------\n", MessageUtils.COLOR_LIGHT_RED));
         return 1;
     }
 
-    /* help command with command parameter
-    public int help_command(CommandContext<CommandSourceStack> context) {
-        String command = StringArgumentType.getString(context, "command");
+    @Override
+    protected int execute(CommandContext<CommandSourceStack> context) {
+        // Error sends chat message here when no params ("argument 'this.args[0]' not found")
+        String command_target = context.getArgument(this.args[0], String.class);
+        Player player = context.getSource().getPlayer();
+        if (player == null)
+            return 0;
+        for (int i = 0; i < PlayerDatabase.commands.size(); i++) {
+            if (PlayerDatabase.commands.get(i).commandName.equalsIgnoreCase(command_target)) {
+                player.sendSystemMessage(MessageUtils.TextWithColor("--------------------", MessageUtils.COLOR_LIGHT_RED));
+                PlayerDatabase.commands.get(i).printInfo(player);
+                player.sendSystemMessage(MessageUtils.TextWithColor("--------------------", MessageUtils.COLOR_LIGHT_RED));
+                return 1;
+            }
+        }
+        MessageUtils.sendError("Command doesn't exist", player);
         return 1;
     }
-    */
 }

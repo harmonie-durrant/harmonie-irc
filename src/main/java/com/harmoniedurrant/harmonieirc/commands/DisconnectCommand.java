@@ -2,22 +2,29 @@ package com.harmoniedurrant.harmonieirc.commands;
 
 import com.harmoniedurrant.harmonieirc.HarmonieIRC;
 import com.harmoniedurrant.harmonieirc.playerdata.PlayerData;
-import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
 import net.minecraft.world.entity.player.Player;
 
 import java.io.IOException;
 
-public class DisconnectCommand {
-    public DisconnectCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("irc_disconnect")
-                .executes(this::disconnect_from_server)
+public class DisconnectCommand extends CommandBase {
+
+    public DisconnectCommand() {
+        super("irc_disconnect", "Disconnects you from the currently connected IRC server.",
+                new String[] {},
+                new String[] {}
         );
     }
 
-    private int disconnect_from_server(CommandContext<CommandSourceStack> context) { // throws CommandSyntaxException
+    @Override
+    protected void defineArguments(LiteralArgumentBuilder<CommandSourceStack> builder) {
+        builder.executes(this::execute);
+    }
+
+    @Override
+    protected int execute(CommandContext<CommandSourceStack> context) {
         Player player = context.getSource().getPlayer();
         if (player == null)
             return 0;

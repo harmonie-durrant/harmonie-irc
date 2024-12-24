@@ -1,9 +1,9 @@
 package com.harmoniedurrant.harmonieirc.playerdata;
 
 // Networking
+import com.harmoniedurrant.harmonieirc.events.ServerReplyEvent;
 import com.harmoniedurrant.harmonieirc.utils.ErrorMessages;
 import com.harmoniedurrant.harmonieirc.utils.MessageUtils;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 
 import java.io.IOException;
@@ -14,10 +14,8 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class PlayerData {
     private static Player _player;
@@ -115,69 +113,16 @@ public class PlayerData {
     public void handle_read_input(String data) {
         String[] lines = data.split("\n");
         for (String line : lines)
-            handle_line(line.replace("\r", "").split(" "));
+            handle_line(line.replace("\r", ""));
     }
 
-    public void handle_line(String[] args) {
-        if (args == null)
-            return;
-        if (args.length < 3) {
-            System.out.println("Input not handled!");
-        }
-        if (!args[0].startsWith(":")) {
-            System.out.println("Input not handled!");
-            return;
-        }
-        int code;
-        try {
-            code = Integer.parseInt(args[1]);
-        } catch (NumberFormatException e) {
-            handle_no_code(args);
-            return;
-        }
-        String message = Arrays.stream(args)
-                .skip(3).collect(Collectors.joining(" "));
-        if (message.startsWith(":")) {
-            handle_code(code, message.replaceFirst(":", ""));
-            return;
-        }
-        handle_code(code, message);
+    public void handle_line(String line) {
+        ServerReplyEvent replyEvent = new ServerReplyEvent(line, this);
+        replyEvent.handle();
     }
 
-    public void handle_code(int code, String message) {
-        MutableComponent text = MessageUtils.TextWithColor("[harmonie_irc] ", 0xFF0000);
-        MessageUtils.AppendText(text, code + " ", 0x00FFFF);
-        MessageUtils.AppendText(text, message, 0xFFFFFF);
-        _player.sendSystemMessage(text);
-
-    }
-
-    public void handle_no_code(String[] args) {
-        if (args[1].equals("NICK")) {
-            set_nickname(args[2]); // To check against other servers (not always args[2])
-            return;
-        }
-        if (args[1].equals("PRIVMSG")) {
-            if (args.length < 4)
-                return;
-            String sender = args[0];
-            if (sender.startsWith(":")) {
-                sender = sender.replaceFirst(":", "");
-            }
-            String message = Arrays.stream(args)
-                    .skip(3).collect(Collectors.joining(" "));
-            if (message.startsWith(":")) {
-                message = message.replaceFirst(":", "");
-            }
-            MessageUtils.showPrivaetMessage(sender, message, _player);
-            return;
-        }
-        System.out.println("Input not handled!");
-    }
-
-    public final void set_nickname(String nick) {
+    public void setNickname(String nick) {
         _nickname = nick;
-        MessageUtils.sendInfo("You are now known as " + _nickname, _player);
     }
 
     public final String getUID() {
@@ -194,6 +139,10 @@ public class PlayerData {
 
     public final String getRealName() {
         return _real_name;
+    }
+
+    public final Player getPlayer() {
+        return _player;
     }
 
     public boolean isSocketConnected() {

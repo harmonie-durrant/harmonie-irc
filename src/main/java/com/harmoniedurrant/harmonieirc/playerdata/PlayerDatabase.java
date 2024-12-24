@@ -1,15 +1,24 @@
 package com.harmoniedurrant.harmonieirc.playerdata;
 
-import java.io.IOException;
-import java.nio.channels.CancelledKeyException;
+import com.harmoniedurrant.harmonieirc.commands.*;
+
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class PlayerDatabase {
 
+    public static final ArrayList<CommandBase> commands = new ArrayList<>();
     private static final ArrayList<PlayerData> _clients = new ArrayList<>();
 
     public PlayerDatabase() {
-
+        commands.add(new HelpCommand());
+        commands.add(new ConnectCommand());
+        commands.add(new DisconnectCommand());
+        commands.add(new NickCommand());
+        commands.add(new PrivMsgCommand());
+        commands.add(new JoinCommand());
+        commands.add(new LeaveCommand());
     }
 
     public PlayerData getPlayer(String uid) {
@@ -22,15 +31,17 @@ public class PlayerDatabase {
     }
 
     public void listenToAll() {
-        _clients.forEach((value) -> {
-            try {
-                value.read_socket();
-            } catch (IOException e) {
-                System.err.println("(PlayerDatabase::listenToAll() uid:" + value.getUID() + ") IO Exception: " + e.getMessage());
-            } catch (CancelledKeyException e) {
-                System.err.println("(PlayerDatabase::listenToAll() uid:" + value.getUID() + ") Cancelled Selection Key Exception: " + e.getMessage());
-            }
-        });
+        try (ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())) {
+            _clients.forEach((value) -> executor.execute(() -> {
+                try {
+                    value.read_socket();
+                } catch (Exception e) {
+                    System.err.println("(PlayerDatabase::listenToAll() uid:" + value.getUID() + ") Exception: " + e.getMessage());
+                }
+            }));
+        } catch (Exception e) {
+            System.err.println("(PlayerDatabase::listenToAll()) Exception: " + e.getMessage());
+        }
     }
 
     public void addPlayer(PlayerData data) {
